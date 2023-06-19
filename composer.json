@@ -1,0 +1,39 @@
+{
+  "name": "plugin-master/container",
+  "description": "The PluginMaster DI Container.",
+  "license": "MIT",
+  "homepage": "https://github.com/WP-Plugin-Master/PluginMaster-Foundation",
+  "support": {
+    "issues": "https://github.com/WP-Plugin-Master/PluginMaster-Foundation/issues",
+    "source": "https://github.com/WP-Plugin-Master/PluginMaster-Foundation"
+  },
+  "authors": [
+    {
+      "name": "AL EMRAN",
+      "email": "emrancu1@gmail.com"
+    }
+  ],
+  "keywords": [
+    "Plugin Master",
+    "WordPress Plugin Development framework"
+  ],
+  "autoload": {
+    "classmap": [],
+    "psr-4": {
+      "PluginMaster\\Container\\": "src/"
+    }
+  },
+  "require": {
+    "php": "^8.0",
+    "psr/container": "^2.0"
+  },
+  "require-dev": {
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "config": {
+    "allow-plugins": {
+      "automattic/jetpack-autoloader": true
+    }
+  }
+}
