@@ -1,4 +1,4 @@
-### Simplified Dependency Injection Container For PluginMaster
+### Simplified Dependency Injection Container For PluginMaster (Or any PHP project)
 
 #### Simplified dependency injection container for PHP project. We create this package for PluginMaster(WordPress Plugin Development Framework)
 
