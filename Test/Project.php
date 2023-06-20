@@ -2,7 +2,7 @@
 
 class Project
 {
-    public function __construct(protected User $user, $name)
+    public function __construct(string $name, protected User $user)
     {
         $this->user->setName($name);
     }
@@ -12,9 +12,9 @@ class Project
         return 'Running...';
     }
 
-    public function user(): User
+    public function user(User $user): User
     {
-        return $this->user;
+        return $user;
     }
 
     public function call(): string

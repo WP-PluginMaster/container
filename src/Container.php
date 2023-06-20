@@ -8,14 +8,9 @@ use PluginMaster\Container\Resolver\CallbackResolver;
 use Psr\Container\ContainerInterface;
 use ReflectionClass;
 use ReflectionMethod;
-use ReflectionNamedType;
 
-class Container implements ContainerContract, ContainerInterface
+class Container extends ContainerContract implements ContainerInterface
 {
-    protected array $resolved = [];
-
-    protected array $bindings = [];
-
     /**
      * @throws \ReflectionException
      * @throws \PluginMaster\Container\Exceptions\NotFoundException
@@ -53,86 +48,15 @@ class Container implements ContainerContract, ContainerInterface
         $constructorParams = $classReflection->getConstructor() ? $classReflection->getConstructor()->getParameters() : [];
 
         return $this->resolved[$class] = $classReflection->newInstance(
-            ...$this->getClassDependencies($constructorParams, $parameters)
+            ...$this->getDependencies($constructorParams, $parameters)
         );
     }
-
-    /**
-     * @throws \ReflectionException
-     * @throws \PluginMaster\Container\Exceptions\NotFoundException
-     */
-    protected function getClassDependencies(array $constructorParams, array $parameters): array
-    {
-        $dependencies = [];
-        /**
-         * loop with constructor parameters or dependencies
-         */
-        foreach ($constructorParams as $constructorParam) {
-            $type = $constructorParam->getType();
-
-            if ($type instanceof ReflectionNamedType) {
-                $instance = $constructorParam->getType() && ! $constructorParam->getType()->isBuiltin()
-                    ? $this->make($constructorParam->getType()->getName())
-                    : $constructorParam->getClass()->newInstance();
-
-                $dependencies[] = $instance;
-            } else {
-                $name = $constructorParam->getName();
-
-                if (! empty($parameters) && array_key_exists($name, $parameters)) {
-                    $dependencies[] = $parameters[$name];
-                } else {
-                    if (! $constructorParam->isOptional()) {
-                        throw new NotFoundException('Can not resolve parameters');
-                    }
-                }
-            }
-        }
-
-        return $dependencies;
-    }
-
-    /**
-     * @throws \ReflectionException
-     * @throws \PluginMaster\Container\Exceptions\NotFoundException
-     */
-    protected function getMethodDependency(object $object, string $method, array $parameters): array
-    {
-        $methodReflection = new ReflectionMethod($object, $method);
-        $methodParams = $methodReflection->getParameters();
-        $dependencies = [];
-
-        foreach ($methodParams as $param) {
-            $type = $param->getType();
-
-            if (! $type instanceof ReflectionNamedType) {
-                $dependencies[] = $this->get($param->getName());
-
-                continue;
-            }
-
-            $name = $param->getName();
-            if (! array_key_exists($name, $parameters)) {
-                if (! $param->isOptional()) {
-                    throw new NotFoundException('Can not resolve parameters');
-                }
-
-                continue;
-            }
-
-            $dependencies[] = $parameters[$name];
-        }
-
-        return [$methodReflection, $dependencies];
-    }
-
 
     /**
      * @throws \ReflectionException|\PluginMaster\Container\Exceptions\NotFoundException
      */
     public function get(string $id): mixed
     {
-
         if ($this->resolved[$id] ?? false) {
             return $this->resolved[$id];
         }
