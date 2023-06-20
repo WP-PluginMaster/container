@@ -37,7 +37,7 @@ echo $user->getName().PHP_EOL;
 
 
 /** @var Project $user */
-$user = $container->make(Project::class, ['name' => 'Make User']);
+$user = $container->make(Project::class, ['name' => 'Make User', 'user' => new User('Hasan')]);
 if($container->has(Project::class)) {
     echo $container->get(Project::class)->user()->getname().PHP_EOL;
 }
