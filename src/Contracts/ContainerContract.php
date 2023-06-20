@@ -25,7 +25,6 @@ abstract class ContainerContract
 
     /**
      * @param  array<int, ReflectionParameter>  $reflectionParameters
-     * @throws \ReflectionException
      * @throws \PluginMaster\Container\Exceptions\NotFoundException
      */
     public function getDependencies(array $reflectionParameters, array $parameters): array
@@ -40,14 +39,17 @@ abstract class ContainerContract
     }
 
     /**
-     * @throws \ReflectionException
      * @throws \PluginMaster\Container\Exceptions\NotFoundException
      */
     private function processParameter(ReflectionParameter $reflectionParameter, $parameters): mixed
     {
+        $name = $reflectionParameter->getName();
+
+        if (! empty($parameters) && array_key_exists($name, $parameters)) {
+            return $parameters[$name];
+        }
 
         $type = $reflectionParameter->getType();
-
         if (
             $type instanceof ReflectionNamedType
             && $reflectionParameter->getType()
@@ -56,9 +58,11 @@ abstract class ContainerContract
             return $this->get($reflectionParameter->getType()->getName());
         }
 
-        $name = $reflectionParameter->getName();
+        if (! $reflectionParameter->isOptional()) {
+            throw new NotFoundException("Can not resolve parameter $name");
+        }
 
-        return $this->getValueFromArrayParams($name, $parameters, $reflectionParameter->isOptional());
+        return null;
     }
 
 
