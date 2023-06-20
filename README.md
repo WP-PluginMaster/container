@@ -2,6 +2,9 @@
 
 #### Simplified dependency injection container for PHP project. We create this package for PluginMaster(WordPress Plugin Development Framework)
 
+```shell
+composer require plugin-master/container
+```
 
 Example:
 
@@ -64,7 +67,7 @@ $user = $container->has(User::class);
 
 ### 1. Clone Repo
 ```shell
-git clone ''
+git clone https://github.com/WP-PluginMaster/container.git
 ```
 
 #### 2. Install Dependency
