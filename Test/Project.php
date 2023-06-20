@@ -12,9 +12,9 @@ class Project
         return 'Running...';
     }
 
-    public function user(User $user): User
+    public function user(): User
     {
-        return $user;
+        return $this->user;
     }
 
     public function call(): string

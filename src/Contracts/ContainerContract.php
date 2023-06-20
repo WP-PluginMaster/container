@@ -45,7 +45,8 @@ abstract class ContainerContract
      */
     private function processParameter(ReflectionParameter $reflectionParameter, $parameters): mixed
     {
-        $type = $parameters->getType();
+
+        $type = $reflectionParameter->getType();
 
         if (
             $type instanceof ReflectionNamedType

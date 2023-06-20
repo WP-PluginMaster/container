@@ -2,7 +2,7 @@
 
 class User
 {
-    private string $name;
+    private string $name = '';
 
     public function getName(): string
     {
